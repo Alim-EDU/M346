@@ -5,14 +5,13 @@
 ### Phase 1: Vorbereitung
 
 - [x] GitHub Repository erstellen
-- [ ] README.md Grundstruktur erstellen
 
 ### Phase 2: Skript-Entwicklung
 
-- [ ] Alte Skripte aus vorherigen Projekten sammeln
-- [ ] Alte Skripte analysieren
+- [x] Alte Skripte aus vorherigen Projekten sammeln
+- [x] Alte Skripte analysieren
 - [ ] Basis-Struktur für neues Deployment-Skript erstellen
-- [ ] Security Group Konfiguration aus alten Skripten übernehmen
+- [x] Security Group Konfiguration aus alten Skripten übernehmen
 - [ ] EC2-Instanz Parameter definieren (Instance Type, AMI, etc.)
 - [ ] Skripte auf Syntax-Fehler prüfen
 - [ ] Skripte committen mit klarer Commit-Message
@@ -53,18 +52,19 @@
 
 - [x] Bewertungskriterien aus Aufgabenstellung durchlesen
 - [ ] Dokumentations-Template vorbereiten (docs/tests.md)
-- [ ] Screenshot-Ordner anlegen (docs/images/)
+- [x] Screenshot-Ordner anlegen (docs/images/)
 - [ ] Checkliste für Tests erstellen
-- [ ] Ersten Test-Commit machen (README.md bearbeiten)
-- [ ] Konzept Architektur-Diagramm erstellen/einfügen
+- [x] Ersten Test-Commit machen (README.md bearbeiten)
+- [x] Konzept Architektur-Diagramm erstellen/einfügen
+- [x] README.md Grundstruktur erstellen
 
 ### Phase 2: Dokumentation während Entwicklung
 
-- [ ] Projekt-Übersicht in README.md schreiben
-- [ ] Ziel des Projekts beschreiben
-- [ ] Verwendete Technologien auflisten
-- [ ] Voraussetzungen dokumentieren (AWS Account, CLI, etc.)
-- [ ] Erste Version committen
+- [x] Projekt-Übersicht in README.md schreiben
+- [x] Ziel des Projekts beschreiben
+- [x] Verwendete Technologien auflisten
+- [x] Voraussetzungen dokumentieren (AWS Account, CLI, etc.)
+- [x] Erste Version committen
 - [ ] Entwicklungs-Prozess in eigenen Worten beschreiben
 - [ ] Fragen zu unklaren Schritten stellen und dokumentieren
 - [ ] Zwischenstände committen
