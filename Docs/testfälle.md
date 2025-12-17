@@ -473,9 +473,9 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 ### Screenshots
 
   
-```markdown
-  ![Nextcloud Dashboard](Images/test3_dashboard.png)
-```
+
+  
+
   
 
   
@@ -514,13 +514,13 @@ Der Test war **erfolgreich**. Alle Grundfunktionen von Nextcloud arbeiten ohne P
 
   
 
-Testzeitpunkt:
+Testzeitpunkt: 17.12.2025 23:32:49
 
   
 
   
 
-Testperson:
+Testperson: Emre
 
   
 
@@ -581,7 +581,13 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 ### Tatsächliches Ergebnis
 
   
-
+-   Das Skript `uninstall.ps1` wurde ohne Fehler ausgeführt.
+    
+-   Alle EC2-Instanzen wurden erfolgreich beendet (terminated).
+    
+-   Die Security Groups und Key Pairs wurden aus dem AWS-Konto gelöscht.
+    
+-   In der AWS Console sind keine aktiven Ressourcen mehr zu sehen.
   
 
   
@@ -602,7 +608,7 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
-  
+  Der Test war **erfolgreich**. Das Skript hat alle Ressourcen sauber entfernt. Es bleiben keine unnötigen Kosten in AWS zurück.
 
   
 
