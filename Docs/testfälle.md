@@ -106,7 +106,9 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
   
 
   
-
+```markdown
+![EC2 Instanzen](Images/test1_ec2_instanzen.png)
+```
   
   
   
