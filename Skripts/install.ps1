@@ -8,15 +8,15 @@ $env:AWS_PAGER = ""
 
 # Farben für bessere Lesbarkeit
 function Write-Step { param($msg) Write-Host "`n>>> $msg" -ForegroundColor Cyan }
-function Write-Success { param($msg) Write-Host "✓ $msg" -ForegroundColor Green }
+function Write-Success { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
 function Write-Info { param($msg) Write-Host "  $msg" -ForegroundColor Yellow }
-function Write-Error-Custom { param($msg) Write-Host "✗ $msg" -ForegroundColor Red }
+function Write-Error-Custom { param($msg) Write-Host "[FEHLER] $msg" -ForegroundColor Red }
 
 Write-Host @"
-╔══════════════════════════════════════════════════════════╗
-║     Nextcloud 2-Server Deployment auf AWS EC2           ║
-║     Webserver + Datenbank-Server                        ║
-╚══════════════════════════════════════════════════════════╝
+================================================================
+     Nextcloud 2-Server Deployment auf AWS EC2
+     Webserver + Datenbank-Server
+================================================================
 "@ -ForegroundColor Cyan
 
 # ============================================================
@@ -40,7 +40,7 @@ $logFile = "deployment-$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').log"
 Start-Transcript -Path $logFile
 
 # SSH Key Pair erstellen oder wiederverwenden
-Write-Info "Prüfe SSH Key Pair..."
+Write-Info "Pruefe SSH Key Pair..."
 $existingKeys = aws ec2 describe-key-pairs --query "KeyPairs[?KeyName=='nextcloud-key'].KeyName" --output text 2>$null
 
 if ($existingKeys -match "nextcloud-key") {
@@ -64,13 +64,13 @@ if ($existingKeys -match "nextcloud-key") {
 Write-Step "Phase 2: Erstelle Security Groups (Firewall-Regeln)"
 
 # Security Group für Webserver
-Write-Info "Prüfe Security Group für Webserver..."
+Write-Info "Pruefe Security Group fuer Webserver..."
 $webSgId = (aws ec2 describe-security-groups --filters "Name=group-name,Values=nextcloud-web-sg" --query "SecurityGroups[0].GroupId" --output text 2>$null)
 
 if ($webSgId -and $webSgId -ne "None" -and $webSgId -match "^sg-") {
     Write-Info "Webserver SG existiert bereits: $webSgId"
 } else {
-    Write-Info "Erstelle neue Security Group für Webserver..."
+    Write-Info "Erstelle neue Security Group fuer Webserver..."
     $webSgId = (aws ec2 create-security-group `
         --group-name nextcloud-web-sg `
         --description "Security Group fuer Nextcloud Webserver" `
@@ -88,19 +88,19 @@ if ($webSgId -and $webSgId -ne "None" -and $webSgId -match "^sg-") {
 }
 
 # Firewall-Regeln für Webserver hinzufügen (falls noch nicht vorhanden)
-Write-Info "Füge Firewall-Regeln für Webserver hinzu..."
+Write-Info "Fuege Firewall-Regeln fuer Webserver hinzu..."
 aws ec2 authorize-security-group-ingress --group-id $webSgId --protocol tcp --port 80 --cidr 0.0.0.0/0 2>$null
 aws ec2 authorize-security-group-ingress --group-id $webSgId --protocol tcp --port 22 --cidr 0.0.0.0/0 2>$null
 Write-Success "Webserver Firewall-Regeln gesetzt (Port 80, 22)"
 
 # Security Group für DB-Server
-Write-Info "Prüfe Security Group für DB-Server..."
+Write-Info "Pruefe Security Group fuer DB-Server..."
 $dbSgId = (aws ec2 describe-security-groups --filters "Name=group-name,Values=nextcloud-db-sg" --query "SecurityGroups[0].GroupId" --output text 2>$null)
 
 if ($dbSgId -and $dbSgId -ne "None" -and $dbSgId -match "^sg-") {
     Write-Info "DB-Server SG existiert bereits: $dbSgId"
 } else {
-    Write-Info "Erstelle neue Security Group für DB-Server..."
+    Write-Info "Erstelle neue Security Group fuer DB-Server..."
     $dbSgId = (aws ec2 create-security-group `
         --group-name nextcloud-db-sg `
         --description "Security Group fuer MariaDB Server" `
@@ -118,7 +118,7 @@ if ($dbSgId -and $dbSgId -ne "None" -and $dbSgId -match "^sg-") {
 }
 
 # Firewall-Regeln für DB-Server hinzufügen
-Write-Info "Füge Firewall-Regeln für DB-Server hinzu..."
+Write-Info "Fuege Firewall-Regeln fuer DB-Server hinzu..."
 aws ec2 authorize-security-group-ingress --group-id $dbSgId --protocol tcp --port 3306 --source-group $webSgId 2>$null
 aws ec2 authorize-security-group-ingress --group-id $dbSgId --protocol tcp --port 22 --cidr 0.0.0.0/0 2>$null
 Write-Success "DB-Server Firewall-Regeln gesetzt (Port 3306 von Webserver, Port 22)"
@@ -203,9 +203,9 @@ if ($dbInstanceId -match "^i-") {
     exit 1
 }
 
-Write-Info "Warte bis DB-Server läuft..."
+Write-Info "Warte bis DB-Server laeuft..."
 aws ec2 wait instance-running --instance-ids $dbInstanceId
-Write-Success "DB-Server läuft!"
+Write-Success "DB-Server laeuft!"
 
 # Private IP des DB-Servers holen
 Write-Info "Hole private IP des DB-Servers..."
@@ -234,7 +234,7 @@ $dbPublicIp = (aws ec2 describe-instances `
     --instance-ids $dbInstanceId `
     --query "Reservations[0].Instances[0].PublicIpAddress" `
     --output text 2>$null)
-Write-Info "DB-Server public IP (für SSH): $dbPublicIp"
+Write-Info "DB-Server public IP (fuer SSH): $dbPublicIp"
 
 # ============================================================
 # PHASE 5: WEBSERVER USER-DATA MIT DB-IP
@@ -322,28 +322,26 @@ systemctl enable apache2
 
 # Installationshinweis erstellen
 cat > /var/www/html/INSTALLATION.txt <<EOF
-╔══════════════════════════════════════════════════════════╗
-║          NEXTCLOUD DATENBANK-VERBINDUNG                 ║
-╚══════════════════════════════════════════════════════════╝
+================================================================
+          NEXTCLOUD DATENBANK-VERBINDUNG
+================================================================
 
 Beim Nextcloud Setup-Assistenten diese Daten eingeben:
 
-┌─────────────────────────────────────────────────────────┐
-│ DATENBANK-KONFIGURATION:                                │
-├─────────────────────────────────────────────────────────┤
-│ Datenbanktyp:    MySQL/MariaDB                          │
-│ Datenbankname:   nextcloud                              │
-│ Datenbankhost:   $dbPrivateIp:3306                      │
-│ Benutzername:    nextcloud                              │
-│ Passwort:        Nextcloud2024!Secure                   │
-│                                                         │
-│ WICHTIG: Data-Ordner ändern auf:                        │
-│          /var/www/nextcloud-data                        │
-└─────────────────────────────────────────────────────────┘
+DATENBANK-KONFIGURATION:
+------------------------
+Datenbanktyp:    MySQL/MariaDB
+Datenbankname:   nextcloud
+Datenbankhost:   $dbPrivateIp:3306
+Benutzername:    nextcloud
+Passwort:        Nextcloud2024!Secure
 
-WICHTIG: 
+WICHTIG: Data-Ordner aendern auf:
+         /var/www/nextcloud-data
+
+WICHTIG:
 1. Verwende die interne IP-Adresse ($dbPrivateIp)
-2. Ändere den Data-Ordner auf /var/www/nextcloud-data
+2. Aendere den Data-Ordner auf /var/www/nextcloud-data
 EOF
 
 echo "=== Webserver Installation abgeschlossen um `$(date) ==="
@@ -383,9 +381,9 @@ if ($webInstanceId -match "^i-") {
     exit 1
 }
 
-Write-Info "Warte bis Webserver läuft..."
+Write-Info "Warte bis Webserver laeuft..."
 aws ec2 wait instance-running --instance-ids $webInstanceId
-Write-Success "Webserver läuft!"
+Write-Success "Webserver laeuft!"
 
 # Public IP des Webservers holen
 Write-Info "Hole Public IP des Webservers..."
@@ -443,15 +441,15 @@ for ($i = 0; $i -lt 600; $i++) {
     } catch {
         if ($i % 30 -eq 0 -and $i -gt 0) {
             $remaining = [math]::Round((600 - $i) / 60, 1)
-            Write-Info "Installation läuft... noch ca. $remaining Minuten"
+            Write-Info "Installation laeuft... noch ca. $remaining Minuten"
         }
         Start-Sleep -Seconds 1
     }
 }
 
 if (-not $webReady) {
-    Write-Info "Timeout erreicht - Installation läuft möglicherweise noch"
-    Write-Info "Überprüfe den Status später mit: http://$webPublicIp"
+    Write-Info "Timeout erreicht - Installation laeuft moeglicherweise noch"
+    Write-Info "Ueberpruefe den Status spaeter mit: http://$webPublicIp"
 }
 
 # ============================================================
@@ -461,70 +459,64 @@ if (-not $webReady) {
 Write-Step "Phase 9: Speichere Deployment-Informationen"
 
 $deploymentInfo = @"
-╔══════════════════════════════════════════════════════════╗
-║     NEXTCLOUD DEPLOYMENT ERFOLGREICH ABGESCHLOSSEN      ║
-╚══════════════════════════════════════════════════════════╝
+================================================================
+     NEXTCLOUD DEPLOYMENT ERFOLGREICH ABGESCHLOSSEN
+================================================================
 
 DEPLOYMENT ZEITPUNKT: $(Get-Date -Format 'dd.MM.yyyy HH:mm:ss')
 
-┌─────────────────────────────────────────────────────────┐
-│ WEBSERVER (Nextcloud + Apache)                          │
-├─────────────────────────────────────────────────────────┤
-│ Instance ID:     $webInstanceId
-│ Public IP:       $webPublicIp
-│ Private IP:      $webPrivateIp
-│ Instance Type:   t2.small
-│ Security Group:  $webSgId
-└─────────────────────────────────────────────────────────┘
+----------------------------------------------------------------
+ WEBSERVER (Nextcloud + Apache)
+----------------------------------------------------------------
+Instance ID:     $webInstanceId
+Public IP:       $webPublicIp
+Private IP:      $webPrivateIp
+Instance Type:   t2.small
+Security Group:  $webSgId
 
-┌─────────────────────────────────────────────────────────┐
-│ DB-SERVER (MariaDB)                                     │
-├─────────────────────────────────────────────────────────┤
-│ Instance ID:     $dbInstanceId
-│ Public IP:       $dbPublicIp (nur für SSH)
-│ Private IP:      $dbPrivateIp (für DB-Verbindung)
-│ Instance Type:   t2.micro
-│ Security Group:  $dbSgId
-│ MySQL Port:      3306
-└─────────────────────────────────────────────────────────┘
+----------------------------------------------------------------
+ DB-SERVER (MariaDB)
+----------------------------------------------------------------
+Instance ID:     $dbInstanceId
+Public IP:       $dbPublicIp (nur fuer SSH)
+Private IP:      $dbPrivateIp (fuer DB-Verbindung)
+Instance Type:   t2.micro
+Security Group:  $dbSgId
+MySQL Port:      3306
 
-┌─────────────────────────────────────────────────────────┐
-│ NEXTCLOUD ZUGRIFF                                       │
-├─────────────────────────────────────────────────────────┤
-│ URL:             http://$webPublicIp
-└─────────────────────────────────────────────────────────┘
+----------------------------------------------------------------
+ NEXTCLOUD ZUGRIFF
+----------------------------------------------------------------
+URL:             http://$webPublicIp
 
-┌─────────────────────────────────────────────────────────┐
-│ DATENBANK-ZUGANGSDATEN (für Nextcloud Setup)           │
-├─────────────────────────────────────────────────────────┤
-│ Datenbanktyp:    MySQL/MariaDB                          │
-│ Datenbankname:   nextcloud                              │
-│ Datenbankhost:   $dbPrivateIp:3306                      │
-│ Benutzername:    nextcloud                              │
-│ Passwort:        Nextcloud2024!Secure                   │
-│                                                         │
-│ Root-Passwort:   RootPass2024!Secure                    │
-└─────────────────────────────────────────────────────────┘
+----------------------------------------------------------------
+ DATENBANK-ZUGANGSDATEN (fuer Nextcloud Setup)
+----------------------------------------------------------------
+Datenbanktyp:    MySQL/MariaDB
+Datenbankname:   nextcloud
+Datenbankhost:   $dbPrivateIp:3306
+Benutzername:    nextcloud
+Passwort:        Nextcloud2024!Secure
 
-┌─────────────────────────────────────────────────────────┐
-│ SSH-VERBINDUNGEN                                        │
-├─────────────────────────────────────────────────────────┤
-│ Webserver:                                              │
-│   ssh -i ~/.ssh/nextcloud-key.pem ubuntu@$webPublicIp
-│                                                         │
-│ DB-Server:                                              │
-│   ssh -i ~/.ssh/nextcloud-key.pem ubuntu@$dbPublicIp
-└─────────────────────────────────────────────────────────┘
+Root-Passwort:   RootPass2024!Secure
 
-┌─────────────────────────────────────────────────────────┐
-│ NÄCHSTE SCHRITTE                                        │
-├─────────────────────────────────────────────────────────┤
-│ 1. Öffne http://$webPublicIp im Browser
-│ 2. Erstelle deinen Admin-Account                       │
-│ 3. Wähle "MySQL/MariaDB" als Datenbank                 │
-│ 4. Gib die oben aufgeführten DB-Zugangsdaten ein       │
-│ 5. Klicke auf "Installation abschließen"               │
-└─────────────────────────────────────────────────────────┘
+----------------------------------------------------------------
+ SSH-VERBINDUNGEN
+----------------------------------------------------------------
+Webserver:
+  ssh -i ~/.ssh/nextcloud-key.pem ubuntu@$webPublicIp
+
+DB-Server:
+  ssh -i ~/.ssh/nextcloud-key.pem ubuntu@$dbPublicIp
+
+----------------------------------------------------------------
+ NAECHSTE SCHRITTE
+----------------------------------------------------------------
+1. Oeffne http://$webPublicIp im Browser
+2. Erstelle deinen Admin-Account
+3. Waehle "MySQL/MariaDB" als Datenbank
+4. Gib die oben aufgefuehrten DB-Zugangsdaten ein
+5. Klicke auf "Installation abschliessen"
 
 LOG-DATEIEN:
 - Deployment-Log: $logFile
@@ -542,10 +534,10 @@ Write-Host $deploymentInfo -ForegroundColor White
 
 Write-Step "Phase 10: Starte Browser und biete SSH-Zugriff an"
 
-Write-Info "Öffne Nextcloud im Browser..."
+Write-Info "Oeffne Nextcloud im Browser..."
 Start-Process "http://$webPublicIp"
 
-Write-Host "`nMöchtest du dich per SSH verbinden?" -ForegroundColor Cyan
+Write-Host "`nMoechtest du dich per SSH verbinden?" -ForegroundColor Cyan
 Write-Host "  [1] Webserver" -ForegroundColor Yellow
 Write-Host "  [2] DB-Server" -ForegroundColor Yellow
 Write-Host "  [3] Beide nacheinander" -ForegroundColor Yellow
@@ -563,7 +555,7 @@ switch ($choice) {
         ssh -i "$env:USERPROFILE\.ssh\nextcloud-key.pem" -o StrictHostKeyChecking=no "ubuntu@$dbPublicIp"
     }
     "3" {
-        Write-Info "Verbinde zum Webserver... (tippe 'exit' für DB-Server)"
+        Write-Info "Verbinde zum Webserver... (tippe 'exit' fuer DB-Server)"
         ssh -i "$env:USERPROFILE\.ssh\nextcloud-key.pem" -o StrictHostKeyChecking=no "ubuntu@$webPublicIp"
         Write-Info "Verbinde zum DB-Server..."
         ssh -i "$env:USERPROFILE\.ssh\nextcloud-key.pem" -o StrictHostKeyChecking=no "ubuntu@$dbPublicIp"
@@ -576,7 +568,7 @@ switch ($choice) {
 Stop-Transcript
 
 Write-Host "`n" -NoNewline
-Write-Success "DEPLOYMENT ERFOLGREICH ABGESCHLOSSEN! 🎉"
+Write-Success "DEPLOYMENT ERFOLGREICH ABGESCHLOSSEN!"
 Write-Host "`nAlle Informationen wurden gespeichert in:" -ForegroundColor Cyan
 Write-Host "  - deployment-info.txt" -ForegroundColor White
 Write-Host "  - $logFile" -ForegroundColor White

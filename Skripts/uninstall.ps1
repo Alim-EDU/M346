@@ -1,30 +1,30 @@
 # ============================================================
-# AWS Cleanup Script - Löscht alle Nextcloud-Ressourcen
+# AWS Cleanup Script - Loescht alle Nextcloud-Ressourcen
 # ============================================================
 
 $ErrorActionPreference = "Continue"
 $env:AWS_PAGER = ""
 
 function Write-Step { param($msg) Write-Host "`n>>> $msg" -ForegroundColor Cyan }
-function Write-Success { param($msg) Write-Host "✓ $msg" -ForegroundColor Green }
+function Write-Success { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
 function Write-Info { param($msg) Write-Host "  $msg" -ForegroundColor Yellow }
-function Write-Error-Custom { param($msg) Write-Host "✗ $msg" -ForegroundColor Red }
+function Write-Error-Custom { param($msg) Write-Host "[X] $msg" -ForegroundColor Red }
 
 Write-Host @"
-╔══════════════════════════════════════════════════════════╗
-║         AWS CLEANUP - Lösche alle Ressourcen            ║
-║                                                          ║
-║  WARNUNG: Dies löscht ALLE EC2-Instanzen,               ║
-║           Security Groups und Key Pairs!                ║
-╚══════════════════════════════════════════════════════════╝
+============================================================
+         AWS CLEANUP - Loesche alle Ressourcen
+============================================================
+  WARNUNG: Dies loescht ALLE EC2-Instanzen,
+           Security Groups und Key Pairs!
+============================================================
 "@ -ForegroundColor Red
 
-Write-Host "`nBist du sicher? Dies kann nicht rückgängig gemacht werden!" -ForegroundColor Yellow
-Write-Host "Tippe 'LÖSCHEN' (in Großbuchstaben) um fortzufahren: " -ForegroundColor Red -NoNewline
+Write-Host "`nBist du sicher? Dies kann nicht rueckgaengig gemacht werden!" -ForegroundColor Yellow
+Write-Host "Tippe 'JA' um fortzufahren: " -ForegroundColor Red -NoNewline
 $confirm = Read-Host
 
-if ($confirm -ne "LÖSCHEN") {
-    Write-Info "Abgebrochen. Keine Ressourcen wurden gelöscht."
+if ($confirm -ne "JA") {
+    Write-Info "Abgebrochen. Keine Ressourcen wurden geloescht."
     exit 0
 }
 
@@ -32,10 +32,10 @@ Write-Host "`n" -NoNewline
 Write-Step "Starte Cleanup-Prozess..."
 
 # ============================================================
-# PHASE 1: EC2 INSTANZEN FINDEN UND LÖSCHEN
+# PHASE 1: EC2 INSTANZEN FINDEN UND LOESCHEN
 # ============================================================
 
-Write-Step "Phase 1: Suche und lösche EC2 Instanzen"
+Write-Step "Phase 1: Suche und loesche EC2 Instanzen"
 
 # Alle laufenden und gestoppten Instanzen finden
 $instances = aws ec2 describe-instances `
@@ -67,7 +67,7 @@ if ($instances) {
                 aws ec2 wait instance-terminated --instance-ids $id --cli-read-timeout 300
                 Write-Success "  $id terminiert"
             } catch {
-                Write-Info "  $id - Timeout oder bereits gelöscht"
+                Write-Info "  $id - Timeout oder bereits geloescht"
             }
         }
     }
@@ -76,15 +76,15 @@ if ($instances) {
 }
 
 # ============================================================
-# PHASE 2: SECURITY GROUPS LÖSCHEN
+# PHASE 2: SECURITY GROUPS LOESCHEN
 # ============================================================
 
-Write-Step "Phase 2: Lösche Security Groups"
+Write-Step "Phase 2: Loesche Security Groups"
 
-# Kurz warten damit EC2 Instanzen vollständig weg sind
+# Kurz warten damit EC2 Instanzen vollstaendig weg sind
 Start-Sleep -Seconds 5
 
-# Alle Security Groups außer 'default' finden
+# Alle Security Groups ausser 'default' finden
 $securityGroups = aws ec2 describe-security-groups `
     --query "SecurityGroups[?GroupName!='default'].[GroupId,GroupName]" `
     --output text
@@ -96,24 +96,24 @@ if ($securityGroups) {
             $sgId = $parts[0]
             $sgName = $parts[1]
             
-            Write-Info "Lösche Security Group: $sgName ($sgId)"
+            Write-Info "Loesche Security Group: $sgName ($sgId)"
             try {
                 aws ec2 delete-security-group --group-id $sgId 2>$null
-                Write-Success "  $sgName gelöscht"
+                Write-Success "  $sgName geloescht"
             } catch {
-                Write-Error-Custom "  Konnte $sgName nicht löschen (möglicherweise noch in Verwendung)"
+                Write-Error-Custom "  Konnte $sgName nicht loeschen (moeglicherweise noch in Verwendung)"
             }
         }
     }
 } else {
-    Write-Info "Keine Security Groups zum Löschen gefunden"
+    Write-Info "Keine Security Groups zum Loeschen gefunden"
 }
 
 # ============================================================
-# PHASE 3: KEY PAIRS LÖSCHEN
+# PHASE 3: KEY PAIRS LOESCHEN
 # ============================================================
 
-Write-Step "Phase 3: Lösche Key Pairs"
+Write-Step "Phase 3: Loesche Key Pairs"
 
 # Alle Key Pairs finden
 $keyPairs = aws ec2 describe-key-pairs --query "KeyPairs[*].KeyName" --output text
@@ -122,19 +122,19 @@ if ($keyPairs) {
     $keyPairs -split "`s+" | ForEach-Object {
         $keyName = $_
         if ($keyName) {
-            Write-Info "Lösche Key Pair: $keyName"
+            Write-Info "Loesche Key Pair: $keyName"
             try {
                 aws ec2 delete-key-pair --key-name $keyName
-                Write-Success "  $keyName gelöscht"
+                Write-Success "  $keyName geloescht"
                 
-                # Lokale .pem Datei löschen falls vorhanden
+                # Lokale .pem Datei loeschen falls vorhanden
                 $pemFile = "$env:USERPROFILE\.ssh\$keyName.pem"
                 if (Test-Path $pemFile) {
                     Remove-Item $pemFile -Force
-                    Write-Success "  Lokale Datei $pemFile gelöscht"
+                    Write-Success "  Lokale Datei $pemFile geloescht"
                 }
             } catch {
-                Write-Error-Custom "  Konnte $keyName nicht löschen"
+                Write-Error-Custom "  Konnte $keyName nicht loeschen"
             }
         }
     }
@@ -143,13 +143,13 @@ if ($keyPairs) {
 }
 
 # ============================================================
-# PHASE 4: LOKALE DATEIEN LÖSCHEN (OPTIONAL)
+# PHASE 4: LOKALE DATEIEN LOESCHEN (OPTIONAL)
 # ============================================================
 
 Write-Step "Phase 4: Lokale Projektdateien"
 
-Write-Host "`nMöchtest du auch die lokalen Projektordner löschen?" -ForegroundColor Yellow
-Write-Host "  [j] Ja, alles löschen" -ForegroundColor Red
+Write-Host "`nMoechtest du auch die lokalen Projektordner loeschen?" -ForegroundColor Yellow
+Write-Host "  [j] Ja, alles loeschen" -ForegroundColor Red
 Write-Host "  [n] Nein, Dateien behalten" -ForegroundColor Green
 $deleteLocal = Read-Host "`nDeine Wahl"
 
@@ -158,9 +158,9 @@ if ($deleteLocal -eq "j" -or $deleteLocal -eq "J") {
     
     foreach ($folder in $folders) {
         if (Test-Path $folder) {
-            Write-Info "Lösche Ordner: $folder"
+            Write-Info "Loesche Ordner: $folder"
             Remove-Item $folder -Recurse -Force
-            Write-Success "  $folder gelöscht"
+            Write-Success "  $folder geloescht"
         }
     }
 } else {
@@ -176,19 +176,19 @@ Write-Step "Cleanup abgeschlossen!"
 
 Write-Host @"
 
-╔══════════════════════════════════════════════════════════╗
-║              CLEANUP ERFOLGREICH                        ║
-╚══════════════════════════════════════════════════════════╝
+============================================================
+              CLEANUP ERFOLGREICH
+============================================================
 
-Gelöschte Ressourcen:
-  ✓ EC2 Instanzen (alle gefundenen)
-  ✓ Security Groups (außer 'default')
-  ✓ Key Pairs (inkl. .pem Dateien)
+Geloeschte Ressourcen:
+  [OK] EC2 Instanzen (alle gefundenen)
+  [OK] Security Groups (ausser 'default')
+  [OK] Key Pairs (inkl. .pem Dateien)
 
 "@ -ForegroundColor Green
 
-# Überprüfung ob wirklich alles weg ist
-Write-Step "Finale Überprüfung..."
+# Ueberpruefung ob wirklich alles weg ist
+Write-Step "Finale Ueberpruefung..."
 
 $remainingInstances = aws ec2 describe-instances `
     --filters "Name=instance-state-name,Values=running,stopped,pending" `
@@ -202,22 +202,22 @@ $remainingSGs = aws ec2 describe-security-groups `
 $remainingKeys = aws ec2 describe-key-pairs --query "KeyPairs[*].KeyName" --output text
 
 if ($remainingInstances) {
-    Write-Info "⚠️  Noch vorhandene Instanzen: $remainingInstances"
+    Write-Info "[!] Noch vorhandene Instanzen: $remainingInstances"
 } else {
-    Write-Success "✓ Keine EC2 Instanzen mehr vorhanden"
+    Write-Success "Keine EC2 Instanzen mehr vorhanden"
 }
 
 if ($remainingSGs) {
-    Write-Info "⚠️  Noch vorhandene Security Groups: $remainingSGs"
-    Write-Info "   (Diese sind möglicherweise noch von anderen Ressourcen abhängig)"
+    Write-Info "[!] Noch vorhandene Security Groups: $remainingSGs"
+    Write-Info "   (Diese sind moeglicherweise noch von anderen Ressourcen abhaengig)"
 } else {
-    Write-Success "✓ Keine benutzerdefinierten Security Groups mehr vorhanden"
+    Write-Success "Keine benutzerdefinierten Security Groups mehr vorhanden"
 }
 
 if ($remainingKeys) {
-    Write-Info "⚠️  Noch vorhandene Key Pairs: $remainingKeys"
+    Write-Info "[!] Noch vorhandene Key Pairs: $remainingKeys"
 } else {
-    Write-Success "✓ Keine Key Pairs mehr vorhanden"
+    Write-Success "Keine Key Pairs mehr vorhanden"
 }
 
-Write-Host "`n✨ AWS Account ist jetzt sauber! Du kannst neu starten.`n" -ForegroundColor Green
+Write-Host "`nAWS Account ist jetzt sauber! Du kannst neu starten.`n" -ForegroundColor Green
