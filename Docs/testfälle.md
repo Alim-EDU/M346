@@ -473,9 +473,9 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 ### Screenshots
 
   
-
-  
-
+```markdown
+  ![Nextcloud Dashboard](Images/test3_dashboard.png)
+```
   
 
   
