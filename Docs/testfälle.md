@@ -1,4 +1,7 @@
+
 # Testdokumentation - M346 Nextcloud auf AWS
+
+  
 
   
 
@@ -10,13 +13,19 @@
 
   
 
+  
+
 Diese Dokumentation enthält alle durchgeführten Tests zur Validierung der Nextcloud-Installation auf AWS EC2.
 
   
 
   
 
+  
+
 ---
+
+  
 
   
 
@@ -28,26 +37,33 @@ Diese Dokumentation enthält alle durchgeführten Tests zur Validierung der Next
 
   
 
+  
+
 ### Testinformationen
 
   
 
   
-  
+
   
 
 Testzeitpunkt: 17.12.2025 22:39:55
 
   
 
+  
+
 Testperson: Emre
 
   
+
   
 
   
 
 ### Testbeschreibung
+
+  
 
   
 
@@ -59,7 +75,11 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
+  
+
 ### Erwartetes Ergebnis
+
+  
 
   
 
@@ -69,11 +89,17 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
+  
+
 - Beide Instanzen sind im Status "running"
 
   
 
+  
+
 - Public IP-Adressen werden angezeigt
+
+  
 
   
 
@@ -83,20 +109,22 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
-### Tatsächliches Ergebnis
--   Das Skript `install.ps1` hat ohne Probleme funktioniert.
-    
--   Zwei EC2-Instanzen (Webserver und DB-Server) wurden erfolgreich erstellt.
-    
--   Beide Instanzen sind aktiv und haben den Status „running“.
-    
--   Die öffentlichen IP-Adressen sind sichtbar.
-    
--   Es gab keine Fehlermeldungen während der Installation.
   
 
+### Tatsächliches Ergebnis
+
+- Das Skript `install.ps1` hat ohne Probleme funktioniert.
+
+- Zwei EC2-Instanzen (Webserver und DB-Server) wurden erfolgreich erstellt.
+
+- Beide Instanzen sind aktiv und haben den Status „running“.
+
+- Die öffentlichen IP-Adressen sind sichtbar.
+
+- Es gab keine Fehlermeldungen während der Installation.
+
   
-  
+
   
 
   
@@ -106,26 +134,32 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
   
 
   
+
 ```markdown
+
 ![EC2 Instanzen](Images/test1_ec2_instanzen.png)
+
 ```
-  
-  
+
   
 
   
 
 ### Fazit
 
+  
+
 Der Test war **erfolgreich**. Das Skript arbeitet perfekt und automatisiert die Erstellung der Server schnell und sicher. Alle Erwartungen wurden erfüllt.
 
   
-  
+
   
 
   
 
 ---
+
+  
 
   
 
@@ -137,14 +171,19 @@ Der Test war **erfolgreich**. Das Skript arbeitet perfekt und automatisiert die 
 
   
 
+  
+
 ### Testinformationen
 
   
 
   
+
   
 
 Testzeitpunkt: 17.12.2025 23:00:55
+
+  
 
   
 
@@ -154,7 +193,11 @@ Testperson: Emre
 
   
 
+  
+
 ### Testbeschreibung
+
+  
 
   
 
@@ -166,7 +209,11 @@ Testperson: Emre
 
   
 
+  
+
 ### Testschritte
+
+  
 
   
 
@@ -176,7 +223,11 @@ Testperson: Emre
 
   
 
+  
+
 2. MariaDB-Status prüfen: `sudo systemctl status mariadb`
+
+  
 
   
 
@@ -184,10 +235,14 @@ Testperson: Emre
 
   
 
+  
+
 4. Nextcloud-Datenbank prüfen: `SHOW DATABASES;`
 
   
 
+  
+  
 
   
 
@@ -199,11 +254,17 @@ Testperson: Emre
 
   
 
+  
+
 - MariaDB läuft (active/running)
 
   
 
+  
+
 - Benutzer "nextcloud" kann sich anmelden
+
+  
 
   
 
@@ -213,18 +274,20 @@ Testperson: Emre
 
   
 
+  
+
 ### Tatsächliches Ergebnis
 
   
--   Ich konnte mich ohne Probleme über SSH mit dem DB-Server verbinden.
-    
--   Der MariaDB-Status wurde geprüft: Der Dienst ist „active (running)“.
-    
--   Die Anmeldung mit dem Benutzer „nextcloud“ hat sofort funktioniert.
-    
--   Mit dem Befehl `SHOW DATABASES;` habe ich gesehen, dass die Datenbank „nextcloud“ existiert.
-  
-  
+
+- Ich konnte mich ohne Probleme über SSH mit dem DB-Server verbinden.
+
+- Der MariaDB-Status wurde geprüft: Der Dienst ist „active (running)“.
+
+- Die Anmeldung mit dem Benutzer „nextcloud“ hat sofort funktioniert.
+
+- Mit dem Befehl `SHOW DATABASES;` habe ich gesehen, dass die Datenbank „nextcloud“ existiert.
+
   
 
   
@@ -234,11 +297,9 @@ Testperson: Emre
   
 
   
-  
-  
 
   
-  
+
   
 
   
@@ -248,11 +309,11 @@ Testperson: Emre
   
 
   
-  
-  Der Test war **erfolgreich**. Die Datenbank ist richtig installiert und konfiguriert. Der Zugriff funktioniert wie geplant und alle wichtigen Daten sind vorhanden.
+
+Der Test war **erfolgreich**. Die Datenbank ist richtig installiert und konfiguriert. Der Zugriff funktioniert wie geplant und alle wichtigen Daten sind vorhanden.
 
   
-  
+
   
 
   
@@ -262,9 +323,12 @@ Testperson: Emre
   
 
   
+
   
 
 ## Test 3: Nextcloud Login und Funktionalität
+
+  
 
   
 
@@ -275,20 +339,26 @@ Testperson: Emre
   
 
   
-  
-  
-
-Testzeitpunkt:
 
   
 
-Testperson:
+Testzeitpunkt: 17.12.2025 23:20:49
+
+  
+
+  
+
+Testperson: Emre
+
+  
 
   
 
   
 
 ### Testbeschreibung
+
+  
 
   
 
@@ -300,7 +370,11 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 ### Testschritte
+
+  
 
   
 
@@ -310,7 +384,11 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 2. Dashboard wird angezeigt
+
+  
 
   
 
@@ -318,11 +396,17 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 4. Neuen Ordner erstellen
 
   
 
+  
+
 5. Datei herunterladen
+
+  
 
   
 
@@ -334,7 +418,11 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 - Erfolgreicher Login
+
+  
 
   
 
@@ -342,11 +430,17 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 - Datei-Upload funktioniert
 
   
 
+  
+
 - Ordner-Erstellung funktioniert
+
+  
 
   
 
@@ -356,12 +450,22 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 ### Tatsächliches Ergebnis
 
-  
+  -   Die Anmeldung mit den Admin-Daten war erfolgreich.
+    
+-   Das Dashboard wird richtig angezeigt und sieht gut aus.
+    
+-   Ich konnte eine neue Datei ohne Fehler hochladen.
+    
+-   Das Erstellen von einem neuen Ordner hat funktioniert.
+    
+-   Der Download der Datei war ebenfalls erfolgreich.
 
   
-  
+
   
 
   
@@ -371,7 +475,7 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
   
 
   
-  
+
   
 
   
@@ -379,14 +483,16 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 ### Fazit
 
   
+Der Test war **erfolgreich**. Alle Grundfunktionen von Nextcloud arbeiten ohne Probleme. Die Plattform ist bereit für die Nutzung.
+  
 
-  
-  
   
 
   
 
 ---
+
+  
 
   
 
@@ -398,7 +504,11 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 ### Testinformationen
+
+  
 
   
 
@@ -408,14 +518,19 @@ Testzeitpunkt:
 
   
 
+  
+
 Testperson:
 
   
+
   
 
   
 
 ### Testbeschreibung
+
+  
 
   
 
@@ -427,7 +542,11 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
+  
+
 ### Erwartetes Ergebnis
+
+  
 
   
 
@@ -437,7 +556,11 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
+  
+
 - Security Groups werden gelöscht
+
+  
 
   
 
@@ -445,7 +568,11 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
+  
+
 - AWS Console zeigt keine Ressourcen mehr
+
+  
 
   
 
@@ -456,7 +583,7 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
   
 
   
-  
+
   
 
   
@@ -466,7 +593,7 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
   
 
   
-  
+
   
 
   
@@ -476,7 +603,7 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
   
 
   
-  
+
   
 
   
