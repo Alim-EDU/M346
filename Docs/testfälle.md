@@ -144,11 +144,11 @@ Der Test war **erfolgreich**. Das Skript arbeitet perfekt und automatisiert die 
   
   
 
-Testzeitpunkt:
+Testzeitpunkt: 17.12.2025 23:00:55
 
   
 
-Testperson:
+Testperson: Emre
 
   
 
@@ -188,6 +188,9 @@ Testperson:
 
   
 
+
+  
+
   
 
 ### Erwartetes Ergebnis
@@ -213,7 +216,13 @@ Testperson:
 ### Tatsächliches Ergebnis
 
   
-
+-   Ich konnte mich ohne Probleme über SSH mit dem DB-Server verbinden.
+    
+-   Der MariaDB-Status wurde geprüft: Der Dienst ist „active (running)“.
+    
+-   Die Anmeldung mit dem Benutzer „nextcloud“ hat sofort funktioniert.
+    
+-   Mit dem Befehl `SHOW DATABASES;` habe ich gesehen, dass die Datenbank „nextcloud“ existiert.
   
   
   
@@ -237,6 +246,10 @@ Testperson:
 ### Fazit
 
   
+
+  
+  
+  Der Test war **erfolgreich**. Die Datenbank ist richtig installiert und konfiguriert. Der Zugriff funktioniert wie geplant und alle wichtigen Daten sind vorhanden.
 
   
   
