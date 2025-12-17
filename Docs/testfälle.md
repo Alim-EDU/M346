@@ -2,7 +2,11 @@
 
   
 
+  
+
 ## Übersicht
+
+  
 
   
 
@@ -10,7 +14,11 @@ Diese Dokumentation enthält alle durchgeführten Tests zur Validierung der Next
 
   
 
+  
+
 ---
+
+  
 
   
 
@@ -18,20 +26,30 @@ Diese Dokumentation enthält alle durchgeführten Tests zur Validierung der Next
 
   
 
+  
+
 ### Testinformationen
 
   
 
+  
+  
+  
 
+Testzeitpunkt: 17.12.2025 22:39:55
 
-Testzeitpunkt:
+  
 
-Testperson:
+Testperson: Emre
 
+  
+  
 
   
 
 ### Testbeschreibung
+
+  
 
   
 
@@ -39,25 +57,47 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
+  
+
 ### Erwartetes Ergebnis
+
+  
 
   
 
 - Zwei EC2-Instanzen werden erstellt
 
+  
+
 - Beide Instanzen sind im Status "running"
 
+  
+
 - Public IP-Adressen werden angezeigt
+
+  
 
 - Keine Fehlermeldungen im Skript
 
   
 
-### Tatsächliches Ergebnis
-
   
 
+### Tatsächliches Ergebnis
+-   Das Skript `install.ps1` hat ohne Probleme funktioniert.
+    
+-   Zwei EC2-Instanzen (Webserver und DB-Server) wurden erfolgreich erstellt.
+    
+-   Beide Instanzen sind aktiv und haben den Status „running“.
+    
+-   Die öffentlichen IP-Adressen sind sichtbar.
+    
+-   Es gab keine Fehlermeldungen während der Installation.
+  
 
+  
+  
+  
 
   
 
@@ -67,19 +107,25 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
-
+  
+  
+  
 
   
 
 ### Fazit
 
+Der Test war **erfolgreich**. Das Skript arbeitet perfekt und automatisiert die Erstellung der Server schnell und sicher. Alle Erwartungen wurden erfüllt.
+
   
-
-
+  
+  
 
   
 
 ---
+
+  
 
   
 
@@ -87,18 +133,28 @@ Ausführung des `install.ps1` Skripts zur automatisierten Erstellung der beiden 
 
   
 
+  
+
 ### Testinformationen
 
   
 
+  
+  
 
-Testzeitpunkt: 
+Testzeitpunkt:
+
+  
 
 Testperson:
 
   
 
+  
+
 ### Testbeschreibung
+
+  
 
   
 
@@ -106,17 +162,29 @@ Testperson:
 
   
 
+  
+
 ### Testschritte
+
+  
 
   
 
 1. SSH-Verbindung zum DB-Server herstellen
 
+  
+
 2. MariaDB-Status prüfen: `sudo systemctl status mariadb`
+
+  
 
 3. Datenbank-Verbindung testen: `mysql -u nextcloud -p -h localhost`
 
+  
+
 4. Nextcloud-Datenbank prüfen: `SHOW DATABASES;`
+
+  
 
   
 
@@ -124,11 +192,19 @@ Testperson:
 
   
 
+  
+
 - MariaDB läuft (active/running)
+
+  
 
 - Benutzer "nextcloud" kann sich anmelden
 
+  
+
 - Datenbank "nextcloud" existiert
+
+  
 
   
 
@@ -136,7 +212,9 @@ Testperson:
 
   
 
-
+  
+  
+  
 
   
 
@@ -144,11 +222,13 @@ Testperson:
 
   
 
-
-
+  
+  
   
 
-
+  
+  
+  
 
   
 
@@ -156,7 +236,9 @@ Testperson:
 
   
 
-
+  
+  
+  
 
   
 
@@ -164,8 +246,12 @@ Testperson:
 
   
 
+  
+  
 
 ## Test 3: Nextcloud Login und Funktionalität
+
+  
 
   
 
@@ -173,15 +259,23 @@ Testperson:
 
   
 
-
+  
+  
+  
 
 Testzeitpunkt:
+
+  
 
 Testperson:
 
   
 
+  
+
 ### Testbeschreibung
+
+  
 
   
 
@@ -189,19 +283,33 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 ### Testschritte
+
+  
 
   
 
 1. Login mit Admin-Zugangsdaten
 
+  
+
 2. Dashboard wird angezeigt
+
+  
 
 3. Neue Datei hochladen
 
+  
+
 4. Neuen Ordner erstellen
 
+  
+
 5. Datei herunterladen
+
+  
 
   
 
@@ -209,15 +317,27 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 - Erfolgreicher Login
+
+  
 
 - Dashboard wird korrekt angezeigt
 
+  
+
 - Datei-Upload funktioniert
+
+  
 
 - Ordner-Erstellung funktioniert
 
+  
+
 - Download funktioniert
+
+  
 
   
 
@@ -225,7 +345,9 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
-
+  
+  
+  
 
   
 
@@ -233,7 +355,9 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
-
+  
+  
+  
 
   
 
@@ -241,11 +365,15 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
-
+  
+  
+  
 
   
 
 ---
+
+  
 
   
 
@@ -253,14 +381,22 @@ Anmeldung mit dem erstellten Admin-Konto und Test der Grundfunktionen.
 
   
 
+  
+
 ### Testinformationen
+
+  
 
   
 
 Testzeitpunkt:
 
+  
+
 Testperson:
 
+  
+  
 
   
 
@@ -268,7 +404,11 @@ Testperson:
 
   
 
+  
+
 Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
+
+  
 
   
 
@@ -276,13 +416,23 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
+  
+
 - Alle EC2-Instanzen werden terminiert
+
+  
 
 - Security Groups werden gelöscht
 
+  
+
 - Key Pairs werden entfernt
 
+  
+
 - AWS Console zeigt keine Ressourcen mehr
+
+  
 
   
 
@@ -290,7 +440,9 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
-
+  
+  
+  
 
   
 
@@ -298,7 +450,9 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
-
+  
+  
+  
 
   
 
@@ -306,13 +460,10 @@ Ausführung des `uninstall.ps1` Skripts zur Bereinigung aller AWS-Ressourcen.
 
   
 
-
+  
+  
+  
 
   
 
 ---
-
-  
-
-
- 
